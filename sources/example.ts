@@ -1,20 +1,20 @@
 /**
- * 清理字符串，移除或转义可能导致提示词注入的字符和模式
+ * Sanitize a string to remove or escape potential prompt injection patterns
  * 
- * @param input 需要清理的输入字符串
- * @param options 清理选项
- * @returns 清理后的安全字符串
+ * @param input The input string to sanitize
+ * @param options Sanitization options
+ * @returns A sanitized, safe string
  */
 function sanitizeString(
   input: string, 
   options: {
-    maxLength?: number,         // 最大允许长度
-    strictMode?: boolean,       // 严格模式（更激进的过滤）
-    allowMarkdown?: boolean,    // 是否允许markdown语法
-    escapeQuotes?: boolean      // 是否转义引号而非移除
+    maxLength?: number,         // Maximum allowed length
+    strictMode?: boolean,       // Strict mode (more aggressive filtering)
+    allowMarkdown?: boolean,    // Whether to allow markdown syntax
+    escapeQuotes?: boolean      // Whether to escape quotes instead of removing them
   } = {}
 ): string {
-  // 设置默认值
+  // Set default values
   const {
     maxLength = 500,
     strictMode = true,
@@ -28,25 +28,25 @@ function sanitizeString(
   
   let sanitized = input;
   
-  // 1. 移除可能的代码块和格式化文本
+  // 1. Remove potential code blocks and formatted text
   if (!allowMarkdown) {
-    // 移除代码块
-    sanitized = sanitized.replace(/```[\s\S]*?```/g, "[代码块已移除]");
-    // 移除内联代码
-    sanitized = sanitized.replace(/`[^`]*`/g, "[代码已移除]");
+    // Remove code blocks
+    sanitized = sanitized.replace(/```[\s\S]*?```/g, "[code block removed]");
+    // Remove inline code
+    sanitized = sanitized.replace(/`[^`]*`/g, "[code removed]");
   }
   
-  // 2. 处理可能的闭合符号和指令模式
-  
-  // 处理HTML/XML标签
+  // 2. Handle closing symbols and potential command patterns
+
+  // Remove HTML/XML tags
   sanitized = sanitized.replace(/<[^>]*>/g, "");
-  
-  // 处理各种括号配对
-  sanitized = sanitized.replace(/\{[\s\S]*?\}/g, "[内容已过滤]"); // 花括号
-  sanitized = sanitized.replace(/\[[\s\S]*?\]/g, "[内容已过滤]"); // 方括号
-  sanitized = sanitized.replace(/\([\s\S]*?\)/g, "[内容已过滤]"); // 圆括号
-  
-  // 3. 处理潜在的指令关键词
+
+  // Remove various bracketed content
+  sanitized = sanitized.replace(/\{[\s\S]*?\}/g, "[content filtered]"); // Curly braces
+  sanitized = sanitized.replace(/$begin:math:display$[\\s\\S]*?$end:math:display$/g, "[content filtered]"); // Square brackets
+  sanitized = sanitized.replace(/$begin:math:text$[\\s\\S]*?$end:math:text$/g, "[content filtered]"); // Parentheses
+
+  // 3. Handle potential prompt injection keywords
   const aiKeywords = [
     "system", "user", "assistant", "model", "prompt", "instruction", 
     "context", "token", "function", "completion", "response", "davinci", 
@@ -56,35 +56,35 @@ function sanitizeString(
   const keywordPattern = new RegExp(`\\b(${aiKeywords.join('|')})\\b`, 'gi');
   sanitized = sanitized.replace(keywordPattern, (match) => `_${match}_`);
   
-  // 4. 处理引号（可选择转义或移除）
+  // 4. Handle quotes (escape or remove)
   if (escapeQuotes) {
-    // 转义引号
+    // Escape quotes
     sanitized = sanitized.replace(/"/g, '\\"').replace(/'/g, "\\'");
   } else {
-    // 移除引号
+    // Remove quotes
     sanitized = sanitized.replace(/["']/g, "");
   }
   
-  // 5. 严格模式下的额外处理
+  // 5. Extra handling for strict mode
   if (strictMode) {
-    // 移除所有可能的控制字符和特殊字符
+    // Remove control characters and special symbols
     sanitized = sanitized.replace(/[\u0000-\u001F\u007F-\u009F\u2000-\u200F\u2028-\u202F]/g, "");
     
-    // 处理可能被用于注入的分隔符和特殊模式
-    sanitized = sanitized.replace(/\.\.\./g, "…"); // 省略号
-    sanitized = sanitized.replace(/\-\-\-+/g, "—"); // 破折号
-    sanitized = sanitized.replace(/={2,}/g, "==");  // 等号序列
+    // Replace common injection-related patterns
+    sanitized = sanitized.replace(/\.\.\./g, "…"); // Ellipsis
+    sanitized = sanitized.replace(/\-\-\-+/g, "—"); // Em dash
+    sanitized = sanitized.replace(/={2,}/g, "==");  // Equal signs
     
-    // 处理URL和链接模式
-    sanitized = sanitized.replace(/(https?:\/\/[^\s]+)/g, "[链接已移除]");
+    // Remove URLs or link-like patterns
+    sanitized = sanitized.replace(/(https?:\/\/[^\s]+)/g, "[link removed]");
   }
   
-  // 6. 处理可能的JSON结构标记
+  // 6. Handle potential JSON syntax indicators
   sanitized = sanitized
-    .replace(/(\s*"\w+"\s*:)/g, "【属性】:")  // JSON属性名
-    .replace(/(\[\s*\]|\{\s*\})/g, "【空】"); // 空数组或对象
+    .replace(/(\s*"\w+"\s*:)/g, "【property】:")  // JSON property names
+    .replace(/($begin:math:display$\\s*$end:math:display$|\{\s*\})/g, "【empty】"); // Empty arrays or objects
   
-  // 7. 限制长度
+  // 7. Trim to max length
   if (sanitized.length > maxLength) {
     sanitized = sanitized.substring(0, maxLength) + "...";
   }
@@ -93,13 +93,13 @@ function sanitizeString(
 }
 
 /**
- * 递归处理对象，对所有字符串值应用sanitizeString函数
+ * Recursively sanitize all string values in an object
  * 
- * @param data 需要处理的数据对象
- * @param options 传递给sanitizeString的选项
- * @param maxDepth 最大递归深度
- * @param currentDepth 当前递归深度
- * @returns 处理后的安全数据对象
+ * @param data The input data object to sanitize
+ * @param options Options to pass into sanitizeString
+ * @param maxDepth Maximum depth for recursion
+ * @param currentDepth Current depth during recursion
+ * @returns Sanitized data object
  */
 function sanitizeData(
   data: any,
@@ -107,52 +107,52 @@ function sanitizeData(
   maxDepth = 5,
   currentDepth = 0
 ): any {
-  // 处理递归深度限制
+  // Enforce recursion depth limit
   if (currentDepth >= maxDepth) {
     return typeof data === 'object' && data !== null 
-      ? "[嵌套对象已简化]" 
+      ? "[nested object simplified]" 
       : data;
   }
   
-  // 基本类型直接返回
+  // Return primitive types as-is
   if (data === null || data === undefined) {
     return data;
   }
   
-  // 处理字符串
+  // Sanitize strings
   if (typeof data === 'string') {
     return sanitizeString(data, options);
   }
   
-  // 处理数字和布尔值
+  // Return numbers and booleans as-is
   if (typeof data === 'number' || typeof data === 'boolean') {
     return data;
   }
   
-  // 处理数组
+  // Sanitize arrays
   if (Array.isArray(data)) {
     return data.map(item => sanitizeData(item, options, maxDepth, currentDepth + 1));
   }
   
-  // 处理对象
+  // Sanitize objects
   if (typeof data === 'object') {
     const result: Record<string, any> = {};
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        // 对属性名也进行简单清理
-        const safeKey = key.replace(/[<>{}\[\]]/g, "");
+        // Clean up the property key
+        const safeKey = key.replace(/[<>{}$begin:math:display$$end:math:display$]/g, "");
         result[safeKey] = sanitizeData(data[key], options, maxDepth, currentDepth + 1);
       }
     }
     return result;
   }
   
-  // 其他类型
+  // Fallback for unknown types
   return String(data);
 }
 
-// 示例用法：
-// 在API返回数据时使用
+// Example usage:
+// Sanitize API response before returning it
 function safeApiResponse(apiData: any): any {
   const sanitizedData = sanitizeData(apiData, {
     strictMode: true,

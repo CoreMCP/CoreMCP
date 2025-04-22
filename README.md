@@ -8,8 +8,8 @@
 
 <div align="center">
   <h3>🌐 Official Links</h3>
-  <a href="https://coremcp.fun/" target="_blank">
-    <img src="https://img.shields.io/badge/🌍_Website-coremcp.fun-blue?style=for-the-badge" alt="Website" />
+  <a href="https://www.coremcp.pro/" target="_blank">
+    <img src="https://img.shields.io/badge/🌍_Website-https://www.coremcp.pro/-blue?style=for-the-badge" alt="Website" />
   </a>
   &nbsp;&nbsp;
   <a href="https://x.com/CoreMCP" target="_blank">

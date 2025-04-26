@@ -1,16 +1,16 @@
 {
-    "mcpServers": {
-        "coremcp": {
-            "command": "node",
-            "args": [
-                "/Users/Username/Desktop/coremcp/build/index.js"
-            ],
-            "env": {
-                "BSC_WALLET_PRIVATE_KEY": "BSC_WALLET_PRIVATE_KEY",
-                "BSC_RPC_URL": "BSC_RPC_URL"
-            },
-            "disabled": false,
-            "autoApprove": []
-        }
+  "mcpServers": {
+    "coremcp": {
+      "command": "node",
+      "args": [
+        "/Users/Username/Desktop/coremcp/build/index.js"
+      ],
+      "env": {
+        "SOLANA_WALLET_PRIVATE_KEY": "SOLANA_WALLET_PRIVATE_KEY",
+        "SOLANA_RPC_URL": "SOLANA_RPC_URL"
+      },
+      "disabled": false,
+      "autoApprove": []
     }
+  }
 }

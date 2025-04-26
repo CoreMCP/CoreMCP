@@ -2,9 +2,9 @@
   <img src="coremcp.png" alt="coremcp Logo" width="300"/>
 </p>
 
-## 📦 CoreMCP – Binance Smart Chain Tool Server (MCP + CLI Ready)
+## 📦 CoreMCP – Solana Tool Server (MCP + CLI Ready)
 
-> A plug-and-play MCP tool server to **send BNB**, **transfer BEP-20 tokens**, **deploy tokens**, and **interact with smart contracts** on the **Binance Smart Chain (BSC)** — built for **Claude Desktop**, **AI agents**, and **developers.**
+> A plug-and-play MCP tool server to send SOL, transfer SPL tokens, deploy programs, and interact with smart contracts on the Solana blockchain — built for Claude Desktop, AI agents, and developers.
 
 <div align="center">
   <h3>🌐 Official Links</h3>
@@ -27,15 +27,15 @@
 
 - 🔐 Secure token & native transfers via CLI or MCP
 - 🧱 Interact with smart contracts (ABI/function-based)
-- 🔄 PancakeSwap integration for swaps & liquidity
-- ⚙️ Create meme tokens & deploy BEP-20 smart contracts
+- 🔄 Raydium integration for swaps & liquidity
+- ⚙️ Create meme tokens & deploy SPL smart contracts
 - 🧠 Native Claude Desktop integration via MCP
 - 🔧 CLI-ready, MCP-compliant, developer-friendly
 - 🔑 Password-protected private keys
 
 ---
 
-## 🛠 Installation & Setup
+## 🛠️ Installation & Setup
 
 ### 1. Install
 
@@ -51,9 +51,9 @@ coremcp --init
 
 You'll be prompted to enter:
 
-- ✅ **BSC Wallet Private Key** _(required)_
+- ✅ **Solana Wallet Private Key** _(required)_
 - ✅ **Wallet Password** _(required, must be 6 characters)_
-- ✅ **Custom RPC URL** _(optional, defaults to:_ `https://bsc-dataseed.binance.org` \*)
+- ✅ **Custom RPC URL** _(optional, defaults to:_ `https://api.mainnet-beta.solana.com` \*)
 
 ---
 
@@ -75,18 +75,18 @@ Claude will detect and run this MCP server with your selected tools.
 
 | Tool Name                  | Description                              |
 | -------------------------- | ---------------------------------------- |
-| `transferNativeToken`      | Send BNB to a wallet                     |
-| `transferBEP20Token`       | Transfer BEP-20 token via symbol/address |
-| `pancakeSwap`              | Swap tokens via PancakeSwap              |
+| `transferNativeToken`      | Send SOL to a wallet                     |
+| `transferSPLToken`         | Transfer SPL token via symbol/address   |
+| `raydiumSwap`              | Swap tokens via Raydium                  |
 | `createFourMeme`           | Create meme token on Four.Meme           |
-| `createBEP20Token`         | Deploy a BEP-20 contract                 |
+| `createSPLToken`           | Deploy an SPL token contract             |
 | `getBalance`               | Get token + native balance               |
 | `callContractFunction`     | Custom contract calls via ABI            |
 | `getWalletInfo`            | Get wallet info for an address           |
-| `securityCheck`            | Check token security of BSC tokens       |
-| `pancakeAddLiquidity`      | Add liquidity to PancakeSwap             |
-| `pancakeMyPosition`        | View your PancakeSwap positions          |
-| `pancakeRemovePosition`    | Remove liquidity from PancakeSwap        |
+| `securityCheck`            | Check token security on Solana           |
+| `raydiumAddLiquidity`      | Add liquidity to Raydium                 |
+| `raydiumMyPosition`        | View your Raydium positions              |
+| `raydiumRemovePosition`    | Remove liquidity from Raydium            |
 | `sellMemeToken`            | Sell meme token on Four.Meme             |
 | ...and more coming soon 🔧 |
 
@@ -133,9 +133,9 @@ This project is built on **Model Context Protocol** – a standard to help agent
 - [x] CLI Configuration Wizard
 - [x] Claude Desktop Integration
 - [x] Token Deploy + Transfer
-- [ ] Token charting tools (DEXTools, Gecko)
+- [ ] Token charting tools (Dexscreener, Gecko Terminal)
 - [ ] Telegram auto-trading agent
-- [ ] AI assistant with BSC on-chain brain
+- [ ] AI assistant with Solana on-chain brain
 
 ---
 

@@ -2,6 +2,7 @@
   <img src="coremcp.png" alt="coremcp Logo" width="300"/>
 </p>
 
+
 ## 📦 CoreMCP – Solana Tool Server (MCP + CLI Ready)
 
 > A plug-and-play MCP tool server to send SOL, transfer SPL tokens, deploy programs, and interact with smart contracts on the Solana blockchain — built for Claude Desktop, AI agents, and developers.
